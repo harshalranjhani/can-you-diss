@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -48,6 +49,9 @@ export default function SignIn() {
     });
   };
 
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -81,6 +85,9 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(evt) => {
+                setEmail(evt.target.value);
+              }}
             />
             <TextField
               margin="normal"
@@ -91,6 +98,10 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(evt) => {
+                setPassword(evt.target.value);
+                console.log({ email, password });
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
