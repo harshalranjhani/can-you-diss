@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { auth } from "../utils/firebase";
 
 function Copyright(props) {
   return (
@@ -40,18 +41,31 @@ const theme = createTheme({
 });
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get("email"),
+  //     password: data.get("password"),
+  //   });
+  // };
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        authUser.user.updateProfile({
+          displayName: firstName.charAt(0).toUpperCase() + " " + lastName,
+        });
+      })
+      .then(() => console.log("success!"))
+      .catch((e) => alert(e.message));
   };
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
 
   return (
     <ThemeProvider theme={theme}>
@@ -71,12 +85,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
+          <Box component="div" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -145,6 +154,7 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="outlined"
+              onClick={handleSubmit}
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
