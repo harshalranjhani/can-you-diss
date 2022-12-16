@@ -1,34 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![ACM-HEADER](https://user-images.githubusercontent.com/14032427/92643737-e6252e00-f2ff-11ea-8a51-1f1b69caba9f.png)
 
-## Getting Started
+<h1 align="center"> PROJECT TITLE </h1>
 
-First, run the development server:
+<p align="center"> 
+Short description about the project.
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
+<p>
+  <a href="https://acmvit.in/" target="_blank">
+    <img alt="made-by-acm" src="https://img.shields.io/badge/MADE%20BY-ACM%20VIT-blue?style=for-the-badge" />
+  </a>
+    <!-- Uncomment the below line to add the license badge. Make sure the right license badge is reflected. -->
+    <!-- <img alt="license" src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" /> -->
+    <!-- forks/stars/tech stack in the form of badges from https://shields.io/ -->
+</p>
+
+---
+
+The overview starts here. Random text about the project, motive, how, what, why etc.
+
+---
+
+## Screenshots
+
+<!-- Add one screenshot of your project (max height: 1000px, max size: 1mb) 'if applicable' under assets folder in root of your project ![sceenshot](assets/<name of image>) -->
+<!-- if your project has multiple pictures , merge them into one image using a tool similar to figma -->
+
+---
+
+## Usage
+
+<!-- How To, Features, Installation etc. as subheadings in this section. example-->
+
+Lets get started!
+
+```console
+git remote add
+git fetch
+git merge
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Authors
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+**Authors:** <!-- [author1's name](link to their github profile), [author2's name](link to their github profile) .. -->  
+**Contributors:** <!-- Generate contributors list using this link - https://contributors-img.web.app/preview -->
