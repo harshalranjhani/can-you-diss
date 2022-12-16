@@ -1,6 +1,10 @@
 import Head from "next/head";
-
+import { useEffect } from "react";
+import { getUsers } from "../utils/users";
 export default function Home() {
+  useEffect(() => {
+    getUsers();
+  }, []);
   return (
     <>
       <Head>
