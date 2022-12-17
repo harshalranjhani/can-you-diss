@@ -18,7 +18,7 @@ const Input = () => {
   const imageIconRef = useRef(null);
   const audioFileRef = useRef(null);
   return (
-    <div className="border-b-2 lg:rounded-xl lg:border-2 xl:mt-6 w-full xl:w-2/3 flex space-x-2 px-2 justify-between shadow-2xl pb-6 border-border-gray scrollbar-hide">
+    <div className="border-b-2 lg:rounded-xl lg:border-2 xl:mt-6 w-full w-full flex space-x-2 px-2 justify-between shadow-2xl pb-6 border-border-gray scrollbar-hide">
       <Image
         height={20}
         width={20}
@@ -134,10 +134,7 @@ const Input = () => {
               <inputIcons.poll className="input-icons" />
             </div>
           </div>
-          <button
-            disabled={!text || !contentFile}
-            className="button py-1 rounded-full w-1/4 max-w-[100px]  mr-3  disabled:opacity-40"
-          >
+          <button className="button py-1 rounded-full w-1/4 max-w-[100px] border-2 border-black hover:border-dazzled-blue transition-all duration-300 mr-3  disabled:opacity-40">
             Post
           </button>
         </div>

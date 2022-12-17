@@ -1,3 +1,5 @@
+import { audio } from "./audio";
+
 const posts = [
   {
     id: 1,
@@ -8,6 +10,10 @@ const posts = [
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
     postImage:
       "https://images.unsplash.com/photo-1667391557492-22031ee7d573?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=600&q=60",
+    audioFile: audio,
+    likes: Math.floor(Math.random() * 100),
+    dislikes: Math.floor(Math.random() * 100),
+    comments: Math.floor(Math.random() * 100),
   },
   {
     id: 2,
@@ -18,6 +24,9 @@ const posts = [
       "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. ",
     postImage:
       "https://images.unsplash.com/photo-1659708709013-19c1af376e68?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    likes: Math.floor(Math.random() * 100),
+    dislikes: Math.floor(Math.random() * 100),
+    comments: Math.floor(Math.random() * 100),
   },
   {
     id: 3,
@@ -26,6 +35,9 @@ const posts = [
       "https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535c42c67e79a7a6962d19_peep-91.svg",
     description:
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+    likes: Math.floor(Math.random() * 100),
+    dislikes: Math.floor(Math.random() * 100),
+    comments: Math.floor(Math.random() * 100),
   },
   {
     id: 4,
@@ -36,6 +48,9 @@ const posts = [
       "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. ",
     postImage:
       "https://images.unsplash.com/photo-1659708709013-19c1af376e68?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    likes: Math.floor(Math.random() * 100),
+    dislikes: Math.floor(Math.random() * 100),
+    comments: Math.floor(Math.random() * 100),
   },
 ];
 
