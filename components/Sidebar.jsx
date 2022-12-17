@@ -11,9 +11,9 @@ const Sidebar = () => {
   return (
     <div className="fixed top-0 left-0 h-screen w-2/12 xl:w-1/4 flex flex-col items-center justify-between border-r-2 border-border-gray">
       <div>
-        <div className="flex flex-col justify-center items-center mt-4">
+        <div className="flex flex-col justify-center items-center">
           <Link href="/" className="hover:opacity-50 transition-all">
-            <div className="hidden xl:flex text-5xl font-extrabold mt-6">
+            <div className="hidden xl:flex text-4xl font-extrabold mt-6">
               Rap Battle
             </div>
             <div>
