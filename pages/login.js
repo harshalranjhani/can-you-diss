@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import LoginIcon from "@mui/icons-material/Login";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { auth } from "../utils/firebase";
 
 function Copyright(props) {
   return (
@@ -40,17 +41,19 @@ const theme = createTheme({
 });
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    await auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => console.log("success!"))
+      .catch((e) => alert(e.message));
+
+    console.log(auth.currentUser);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -122,7 +125,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

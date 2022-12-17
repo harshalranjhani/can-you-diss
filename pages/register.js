@@ -60,7 +60,7 @@ export default function SignUp() {
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
         authUser.user.updateProfile({
-          displayName: firstName.charAt(0).toUpperCase() + " " + lastName,
+          displayName: firstName.charAt(0).toUpperCase() + "." + lastName,
         });
       })
       .then(() => console.log("success!"))
