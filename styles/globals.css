@@ -5,7 +5,29 @@
 @tailwind utilities;
 
 :root {
-  background-color: #121212;
+  background-color: black;
   color: white;
   font-family: "Inter", sans-serif;
+}
+
+::selection {
+  background-color: #3362aa;
+}
+
+@layer components {
+  .label {
+    @apply text-base;
+  }
+
+  .sidebar-menu-item {
+    @apply flex w-1/12 space-x-4 justify-center px-5 rounded-3xl xl:my-2 hover:border-dazzled-blue items-center xl:p-3 border-[3px] border-black xl:w-[200px] cursor-pointer xl:justify-start lg:rounded-full  transition-all;
+  }
+
+  .sidebar-text-item {
+    @apply hidden xl:flex;
+  }
+
+  .input-icons {
+    @apply h-5 w-5 cursor-pointer transition-all hover:transition-transform duration-300 ease-in-out hover:scale-125 text-[];
+  }
 }
