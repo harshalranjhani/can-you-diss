@@ -10,13 +10,85 @@ import ProfilePicture from "../assets/profile_picture.svg";
 
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
+import { auth, db, storage } from "../utils/firebase";
+import firebase from "firebase/compat/app";
+import { ref } from "firebase/compat/storage";
+import { v4 } from "uuid";
 
 const Input = () => {
   const [text, setText] = useState("");
   const [contentFile, setContentFile] = useState();
   const [audioFile, setAudioFile] = useState();
+  const [contentFileToShow, setContentFileToShow] = useState();
+  const [audioFileToShow, setAudioFileToShow] = useState();
   const imageIconRef = useRef(null);
   const audioFileRef = useRef(null);
+  const [audioUrl, setAudioUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
+  const uploadAudioFile = (file) => {
+    if (!file) return;
+    const storageRef = firebase.storage().ref();
+    const child = `audio/${file.name} + ${v4()}`;
+    const audioRef = storageRef.child(child);
+    audioRef
+      .put(file)
+      .then((snapshot) => {
+        console.log("Uploaded a blob or file!");
+      })
+      .then(() => {
+        storageRef
+          .child(child)
+          .getDownloadURL()
+          .then((url) => {
+            setAudioUrl(url);
+          })
+          .catch((e) => console.log(e));
+      });
+    console.log(audioUrl);
+  };
+
+  const uploadImageFile = (file) => {
+    if (!file) return;
+    const storageRef = firebase.storage().ref();
+    const child = `image/${file.name} + ${v4()}`;
+    const imageRef = storageRef.child(child);
+    imageRef
+      .put(file)
+      .then((snapshot) => {
+        console.log("Uploaded a blob or file!");
+      })
+      .then(() => {
+        storageRef
+          .child(child)
+          .getDownloadURL()
+          .then((url) => {
+            setImageUrl(url);
+          })
+          .catch((e) => console.log(e));
+      });
+  };
+
+  const createPost = async () => {
+    console.log("creating post...");
+    uploadAudioFile(audioFile);
+    uploadImageFile(contentFile);
+    const uid = auth.currentUser.uid;
+    const postDocRef = db.collection("users").doc(uid);
+    postDocRef
+      .collection("posts")
+      .add({
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        description: text,
+        postImage: imageUrl,
+        audioFile: audioUrl,
+        challengeTo: "reference of challenged user",
+        profileImage: "",
+      })
+      .then((res) => console.log("success!"))
+      .catch((e) => console.log(e));
+  };
+
   return (
     <div className="border-b-2 lg:rounded-xl lg:border-2 xl:mt-6 w-full xl:w-2/3 flex space-x-2 px-2 justify-between shadow-2xl pb-6 border-border-gray scrollbar-hide">
       <Image
@@ -48,7 +120,7 @@ const Input = () => {
             <Image
               height={20}
               width={20}
-              src={contentFile}
+              src={contentFileToShow}
               className="rounded-2xl max-h-80 w-full object-contain"
               alt="Image not found"
             />
@@ -67,7 +139,7 @@ const Input = () => {
             </div>
             <div className="py-10 mr-4 border-2 border-border-gray rounded">
               <AudioPlayer
-                src={audioFile}
+                src={audioFileToShow}
                 style={{ backgroundColor: "black" }}
                 onPlay={(e) => console.log("onPlay")}
                 showJumpControls={false}
@@ -97,8 +169,9 @@ const Input = () => {
                   }
                   fileReader.onload = (readerEvt) => {
                     console.log(readerEvt.target?.result);
-                    setContentFile(readerEvt.target?.result);
+                    setContentFileToShow(readerEvt.target?.result);
                   };
+                  setContentFile(evt.target.files[0]);
                 }}
                 hidden
               />
@@ -119,9 +192,10 @@ const Input = () => {
                     fileReader.readAsDataURL(evt.target.files[0]);
                   }
                   fileReader.onload = (readerEvt) => {
-                    setAudioFile(readerEvt.target?.result);
+                    setAudioFileToShow(readerEvt.target?.result);
                     console.log(readerEvt.target?.result);
                   };
+                  setAudioFile(evt.target.files[0]);
                 }}
                 ref={audioFileRef}
                 hidden
@@ -137,6 +211,7 @@ const Input = () => {
           <button
             disabled={!text || !contentFile}
             className="button py-1 rounded-full w-1/4 max-w-[100px]  mr-3  disabled:opacity-40"
+            onClick={createPost}
           >
             Post
           </button>

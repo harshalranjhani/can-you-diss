@@ -72,7 +72,10 @@ export default function SignUp() {
           loser: false,
           wins: 0,
           losses: 0,
-          credits: 5,
+          challengesAccepted: 0,
+          challengesRejected: 0,
+          winnerBadgesEarned: 0,
+          loserBadgesEarned: 0,
         });
       })
 

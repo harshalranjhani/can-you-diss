@@ -14,7 +14,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import LoginIcon from "@mui/icons-material/Login";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { auth } from "../utils/firebase";
+import { auth, db } from "../utils/firebase";
+import firebase from "firebase/compat/app";
+import Layout from "../components/Layout";
 
 const theme = createTheme({
   palette: {
@@ -26,7 +28,7 @@ export default function Dashboard() {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
-        Dashboard
+        <Layout />
       </Container>
     </ThemeProvider>
   );
