@@ -8,13 +8,14 @@ const Post = ({
   description,
   postImage,
   audioFile,
+  dissedUserName,
 }) => {
   return (
     <div>
       <div>
         <Profile />
       </div>
-      <div></div>
+      <div>{description}</div>
       <div></div>
       <div></div>
       <div></div>

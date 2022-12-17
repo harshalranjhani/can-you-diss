@@ -2,7 +2,7 @@ import Image from "next/image";
 import profilePicture from "../assets/profile_picture.svg";
 import { user } from "../data/user.js";
 
-const Profile = ({ name, username, profilePicture }) => {
+const Profile = ({ name, username, pfp }) => {
   return (
     <div className="flex mb-5 items-center justify-between">
       <Image
