@@ -211,6 +211,7 @@ const Input = () => {
           <button
             disabled={!text || !contentFile}
             className="button py-1 rounded-full w-1/4 max-w-[100px]  mr-3  disabled:opacity-40"
+            onClick={createPost}
           >
             Post
           </button>
