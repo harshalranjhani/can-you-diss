@@ -15,6 +15,9 @@ import Container from "@mui/material/Container";
 import LoginIcon from "@mui/icons-material/Login";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { auth } from "../utils/firebase";
+import Router, { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../store/auth-slice";
 
 function Copyright(props) {
   return (
@@ -43,16 +46,15 @@ const theme = createTheme({
 export default function SignIn() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const user = useSelector((state) => state.auth.user);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await auth
-      .signInWithEmailAndPassword(email, password)
-      .then(() => console.log("success!"))
-      .catch((e) => alert(e.message));
-
-    console.log(auth.currentUser);
+    const response = await dispatch(authActions.login({ email, password }));
+    console.log(user);
   };
 
   return (
@@ -103,7 +105,6 @@ export default function SignIn() {
               autoComplete="current-password"
               onChange={(evt) => {
                 setPassword(evt.target.value);
-                console.log({ email, password });
               }}
             />
             <FormControlLabel
