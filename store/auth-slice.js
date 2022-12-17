@@ -8,16 +8,10 @@ const authSlice = createSlice({
   },
   reducers: {
     login(state, action) {
-      auth
-        .signInWithEmailAndPassword(
-          action.payload.email,
-          action.payload.password
-        )
-        .then(() => console.log(auth.currentUser))
-        .catch((e) => alert(e.message));
-      const newState = { currentUser: auth.currentUser };
+      const newState = { currentUser: action.payload.currentUser };
       //   console.log("email ", action.payload.email);
       //   console.log(action.payload.password);
+      console.log("setting state")
       return newState;
     },
     logout(state, action) {

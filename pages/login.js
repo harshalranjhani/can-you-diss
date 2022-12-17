@@ -52,9 +52,11 @@ export default function SignIn() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const response = await dispatch(authActions.login({ email, password }));
-    console.log(user);
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => console.log(auth.currentUser))
+      .catch((e) => alert(e.message));
+    dispatch(authActions.login({ currentUser: auth.currentUser }));
   };
 
   return (
@@ -75,12 +77,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box component="div" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -114,6 +111,7 @@ export default function SignIn() {
             <Button
               type="submit"
               fullWidth
+              onClick={handleSubmit}
               variant="outlined"
               sx={{ mt: 3, mb: 2 }}
             >

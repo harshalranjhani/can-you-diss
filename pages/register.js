@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { auth } from "../utils/firebase";
+import { auth, db } from "../utils/firebase";
 
 function Copyright(props) {
   return (
@@ -59,10 +59,23 @@ export default function SignUp() {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
-        authUser.user.updateProfile({
-          displayName: firstName.charAt(0).toUpperCase() + "." + lastName,
+        const uid = authUser.user.uid;
+        const userDocRef = db.collection("users").doc(uid);
+        userDocRef.set({
+          displayName:
+            firstName.charAt(0).toUpperCase() +
+            firstName.slice(1) +
+            " " +
+            lastName.charAt(0).toUpperCase() +
+            lastName.slice(1),
+          username: "rapper123",
+          loser: false,
+          wins: 0,
+          losses: 0,
+          credits: 5,
         });
       })
+
       .then(() => console.log("success!"))
       .catch((e) => alert(e.message));
   };
