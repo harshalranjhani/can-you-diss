@@ -17,6 +17,7 @@ import { v4 } from "uuid";
 
 const Input = () => {
   const [text, setText] = useState("");
+  const [challengedUser, setChallengedUser] = useState("");
   const [contentFile, setContentFile] = useState();
   const [audioFile, setAudioFile] = useState();
   const [contentFileToShow, setContentFileToShow] = useState();
@@ -69,7 +70,22 @@ const Input = () => {
       });
   };
 
+  const queryDb = async () => {
+    const response = await db
+      .collection("users")
+      .where("displayName", "==", challengedUser)
+      .get();
+    console.log(response._delegate._snapshot);
+    return;
+  };
+
   const createPost = async () => {
+    // const response = await db
+    //   .collection("users")
+    //   .where("displayName", "==", challengedUser);
+    // console.log(response);
+    // return;
+
     console.log("creating post...");
     uploadAudioFile(audioFile);
     uploadImageFile(contentFile);
@@ -82,11 +98,26 @@ const Input = () => {
         description: text,
         postImage: imageUrl,
         audioFile: audioUrl,
-        challengeTo: "reference of challenged user",
+        challengeTo: "reference of challenged   user",
         profileImage: "",
+        likes: 0,
+        dislikes: 0,
+        comments: { count: 0, comments: [] },
       })
       .then((res) => console.log("success!"))
       .catch((e) => console.log(e));
+
+    db.collection("posts").add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      description: text,
+      postImage: imageUrl,
+      audioFile: audioUrl,
+      challengeTo: "reference of challenged user",
+      profileImage: "",
+      likes: 0,
+      dislikes: 0,
+      comments: { count: 0, comments: [] },
+    });
     setText("");
     setAudioFile(null);
     setContentFile(null);
@@ -107,6 +138,13 @@ const Input = () => {
           placeholder="what's on your mind?"
           onChange={(evt) => {
             setText(evt.target.value);
+          }}
+        />
+        <textarea
+          className="w-full h-6 bg-transparent outline-none mb-2 px-2 text-lg "
+          placeholder="Who's getting dissed today?"
+          onChange={(evt) => {
+            setChallengedUser(evt.target.value);
           }}
         />
         {contentFile ? <div>Photo:</div> : null}
@@ -213,8 +251,8 @@ const Input = () => {
           </div>
           <button
             className="button py-1 rounded-full w-1/4 max-w-[100px] mr-3 hover:border-twit-blue disabled:opacity-40 border-2 disabled:hover:border-twit-red"
-            disabled={!text}
-            onClick={createPost}
+            disabled={!(text && challengedUser) || !audioFile || !contentFile}
+            onClick={queryDb}
           >
             Post
           </button>
