@@ -3,13 +3,17 @@ import "firebase/compat/firestore";
 import "firebase/compat/auth";
 import { getStorage, ref } from "firebase/storage";
 const firebaseConfig = {
-  apiKey: "AIzaSyBLoqKjCxY5I99f9E9fNPgWDhfbMrmm5MM",
-  authDomain: "canyoudiss.firebaseapp.com",
-  projectId: "canyoudiss",
-  storageBucket: "canyoudiss.appspot.com",
-  messagingSenderId: "345768283022",
-  appId: "1:345768283022:web:bfc68ba12d77e62ca3f2df",
-  measurementId: "G-V1YDEQMKTY",
+  apiKey: "AIzaSyDNaVFg1PMwEoK1JzyuXdbVsQxFGgnmrPs",
+
+  authDomain: "can-you-diss.firebaseapp.com",
+
+  projectId: "can-you-diss",
+
+  storageBucket: "can-you-diss.appspot.com",
+
+  messagingSenderId: "1075138683324",
+
+  appId: "1:1075138683324:web:a495119a202362aff54bb9",
 };
 
 let app;
