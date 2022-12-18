@@ -71,8 +71,8 @@ const Input = () => {
 
   const createPost = async () => {
     console.log("creating post...");
-    uploadAudioFile(audioFile);
-    uploadImageFile(contentFile);
+    await uploadAudioFile(audioFile);
+    await uploadImageFile(contentFile);
     const uid = auth.currentUser.uid;
     const postDocRef = db.collection("users").doc(uid);
     postDocRef

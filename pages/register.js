@@ -76,6 +76,7 @@ export default function SignUp() {
           challengesRejected: 0,
           winnerBadgesEarned: 0,
           loserBadgesEarned: 0,
+          email: email,
         });
       })
 
