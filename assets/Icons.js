@@ -48,3 +48,15 @@ export const inputIcons = {
   poll: PollOutlinedIcon,
   audio: AudiotrackIcon,
 };
+
+import like from "@heroicons/react/20/solid/HandThumbUpIcon";
+import dislike from "@heroicons/react/20/solid/HandThumbDownIcon";
+import comments from "@heroicons/react/20/solid/ChatBubbleLeftIcon";
+import trash from "@heroicons/react/20/solid/TrashIcon";
+
+export const postIcons = {
+  like,
+  dislike,
+  comments,
+  trash,
+};
