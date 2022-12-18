@@ -1,5 +1,7 @@
 import Post from "./Post";
-import posts from "../data/posts";
+
+import { useSelector } from "react-redux";
+import { postActions } from "../store/post-slice";
 import { useEffect, useState } from "react";
 import { db, auth } from "../utils/firebase";
 
@@ -26,8 +28,10 @@ const Posts = () => {
     return unsubscribe;
   }, [firebasePosts]);
 
+  const posts = useSelector((state) => state.post);
+  console.table(posts);
   return (
-    <div>
+    <div className="w-full">
       {firebasePosts.map(({ id, data }) => {
         return (
           <Post
@@ -44,6 +48,9 @@ const Posts = () => {
             comments={20}
           />
         );
+        {
+          console.log(posts);
+        }
       })}
     </div>
   );

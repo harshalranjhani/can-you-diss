@@ -87,10 +87,13 @@ const Input = () => {
       })
       .then((res) => console.log("success!"))
       .catch((e) => console.log(e));
+    setText("");
+    setAudioFile(null);
+    setContentFile(null);
   };
 
   return (
-    <div className="border-b-2 lg:rounded-xl lg:border-2 xl:mt-6 w-full flex space-x-2 px-2 justify-between shadow-2xl pb-6 border-border-gray scrollbar-hide">
+    <div className="border-b-2 lg:border-x-2 w-full flex space-x-2 px-2 justify-between shadow-2xl pb-6 border-border-gray scrollbar-hide">
       <Image
         height={20}
         width={20}
@@ -209,8 +212,8 @@ const Input = () => {
             </div>
           </div>
           <button
-            disabled={!text || !contentFile}
-            className="button py-1 rounded-full w-1/4 max-w-[100px]  mr-3  disabled:opacity-40"
+            className="button py-1 rounded-full w-1/4 max-w-[100px] mr-3 hover:border-twit-blue disabled:opacity-40 border-2 disabled:hover:border-twit-red"
+            disabled={!text}
             onClick={createPost}
           >
             Post

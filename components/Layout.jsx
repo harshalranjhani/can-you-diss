@@ -12,6 +12,13 @@ const Layout = () => {
       <Sidebar />
       <main className="w-10/12 xl:w-3/4 ">
         <Navbar />
+        <div className="app-container w-full flex justify-center">
+          <div className="w-full xl:w-2/3 flex flex-col items-center">
+            <Input />
+            <Posts />
+            {/* Posts */}
+          </div>
+        </div>
         <div className="w-full xl:w-2/3 flex flex-col items-center ">
           <Input />
           {/* Posts */}
