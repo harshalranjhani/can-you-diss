@@ -54,7 +54,9 @@ export default function SignIn() {
     event.preventDefault();
     auth
       .signInWithEmailAndPassword(email, password)
-      .then(() => console.log(auth.currentUser))
+      .then(() => {
+        console.log("user authenticated!");
+      })
       .catch((e) => alert(e.message));
     dispatch(authActions.login({ currentUser: auth.currentUser }));
   };

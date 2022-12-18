@@ -11,11 +11,7 @@ import "react-h5-audio-player/lib/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { postActions } from "../store/post-slice";
 
-const ACTIONS = {
-  like: "LIKE",
-  dislike: "DISLIKE",
-  delete: "DELETE",
-};
+import ACTIONS from "../store/actions";
 
 const Post = ({
   id,
@@ -30,8 +26,8 @@ const Post = ({
   comments,
 }) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.post);
-
+  const state = useSelector((state) => state.post);
+  console.log(state);
   return (
     <div className="pt-6 flex border-x-2 border-b-2 border-border-gray">
       <div>
@@ -85,12 +81,12 @@ const Post = ({
           <span
             className="post-actions hover:bg-onhover-green hover:text-twit-green transition-all duration-300"
             onClick={() => {
-              console.log("like button clicked");
+              console.log("like button pressed");
               dispatch(
-                postActions.likeDislikePost(posts, {
-                  type: ACTIONS.like,
+                postActions.likeDislikePost(state, {
                   payload: {
-                    id,
+                    type: ACTIONS.like,
+                    id: id,
                   },
                 })
               );
@@ -102,12 +98,12 @@ const Post = ({
           <span
             className="post-actions hover:bg-onhover-red hover:text-twit-red transition-all duration-300"
             onClick={() => {
-              console.log("like button clicked");
+              console.log("dislike button pressed");
               dispatch(
-                postActions.likeDislikePost(posts, {
-                  type: ACTIONS.dislike,
+                postActions.likeDislikePost(state, {
                   payload: {
-                    id,
+                    type: ACTIONS.dis,
+                    id: id,
                   },
                 })
               );
@@ -123,11 +119,11 @@ const Post = ({
           <span
             className="post-actions hover:bg-onhover-blue hover:text-twit-blue transition-all duration-300"
             onClick={() => {
-              console.log("delete button clicked");
+              console.log("delte button pressed");
               dispatch(
-                postActions.deletePost(posts, {
+                postActions.deletePost(state, {
                   payload: {
-                    id,
+                    id: id,
                   },
                 })
               );
