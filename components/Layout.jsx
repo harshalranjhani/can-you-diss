@@ -19,11 +19,6 @@ const Layout = () => {
             {/* Posts */}
           </div>
         </div>
-        <div className="w-full xl:w-2/3 flex flex-col items-center ">
-          <Input />
-          {/* Posts */}
-          {/* <Posts /> */}
-        </div>
       </main>
     </div>
   );
