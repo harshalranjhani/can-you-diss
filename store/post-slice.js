@@ -86,7 +86,7 @@ const postSlice = createSlice({
     },
     deletePost(state, action) {
       const newState = state.posts.filter((item) => {
-        if (item.id !== action.payload.id) {
+        if (item.id == action.payload.id) {
           return item;
         }
       });

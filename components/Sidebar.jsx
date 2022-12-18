@@ -14,7 +14,8 @@ const Sidebar = () => {
         <div className="flex flex-col justify-center items-center">
           <Link href="/" className="hover:opacity-50 transition-all">
             <div className="hidden xl:flex text-4xl font-extrabold mt-6">
-              Can You Diss
+              Sangeet <br />
+              Muthbhed
             </div>
             <div>
               <Image
