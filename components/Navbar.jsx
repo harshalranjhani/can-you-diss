@@ -5,8 +5,7 @@ import profilePicture from "../assets/profile_picture.svg";
 import Image from "next/image";
 import Link from "next/link";
 
-const Navbar = () => {
-  const currentContext = "Home";
+const Navbar = ({ currentContext }) => {
   const [darkTheme, setDarkTheme] = useState(true);
   const [searchKey, setSearchKey] = useState("");
 

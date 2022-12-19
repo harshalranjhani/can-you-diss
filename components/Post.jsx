@@ -27,7 +27,6 @@ const Post = ({
 }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.post);
-  console.log(state);
   return (
     <div className="pt-6 flex border-x-2 border-b-2 border-border-gray">
       <div>
