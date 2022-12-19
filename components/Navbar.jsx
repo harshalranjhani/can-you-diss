@@ -12,7 +12,7 @@ const Navbar = ({ currentContext }) => {
   return (
     // blur navbar after it scrolls past the input field
     // idk how to do that
-    <nav className="sticky top-0 flex justify-between items-center border-b-2 border-border-gray py-3">
+    <nav className="sticky bg-black top-0 flex justify-between items-center border-b-2 border-border-gray py-3">
       <div className="ml-2 text-lg font-semibold">{currentContext}</div>
       <input
         type="text"

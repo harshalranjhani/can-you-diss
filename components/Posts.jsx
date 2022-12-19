@@ -5,18 +5,25 @@ import { postActions } from "../store/post-slice";
 import { useEffect, useState, useCallback } from "react";
 import { db, auth } from "../utils/firebase";
 
+import { user } from "../data/user";
+
 const Posts = () => {
   // const posts = useSelector((state) => state.post.posts);
   // console.table(posts);
 
   const [posts, setPosts] = useState([]);
+  let p = [];
   const getPosts = useCallback(async () => {
     await db
       .collection("posts")
       .get()
       .then((querySnapshot) => {
-        setPosts(querySnapshot.docs);
-        console.log(posts);
+        // setPosts(querySnapshot.);
+        // console.log(posts);
+        querySnapshot.forEach((doc) => {
+          p.push(doc.data());
+        });
+        setPosts(p);
       });
   }, []);
   useEffect(() => {
@@ -32,7 +39,7 @@ const Posts = () => {
               key={post.id}
               id={post.id}
               username={auth.currentUser.displayName}
-              profilePicture={post.profileImage}
+              profilePicture={user.profilePicture}
               description={post.description}
               postImage={post.postImage}
               audioFile={post.audioFile}

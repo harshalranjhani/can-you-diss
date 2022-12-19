@@ -17,13 +17,13 @@ import { useRouter } from "next/router";
 
 const ProfilePage = () => {
   const router = useRouter();
-  const challengedUser = router.query.id;
-  console.log("CHECK HERE" + challengedUser);
-  const queryDb = async () => {
+  const { id } = router.query;
+  console.log(`ID IS : ${id}`);
+  const queryDb = async (id) => {
     let challengedUserId;
-    const response = await db
+    const response = db
       .collection("users")
-      .where("displayName", "==", challengedUser)
+      .where("displayName", "==", "Checking Heyther")
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -36,9 +36,12 @@ const ProfilePage = () => {
       });
     return challengedUserId;
   };
+  const func = (callback) => {
+    callback(id);
+  };
   useEffect(() => {
     setTimeout(() => {
-      queryDb();
+      func(queryDb);
     }, 2000);
   }, []);
 
