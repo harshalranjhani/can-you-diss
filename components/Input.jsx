@@ -24,82 +24,8 @@ const Input = () => {
   const [audioFileToShow, setAudioFileToShow] = useState();
   const imageIconRef = useRef(null);
   const audioFileRef = useRef(null);
-  const [audioUrl, setAudioUrl] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-
-  const uploadAudioFile = (file) => {
-    if (!file) return;
-    const storageRef = firebase.storage().ref();
-    const child = `audio/${file.name} + ${v4()}`;
-    const audioRef = storageRef.child(child);
-    var uploadTask = audioRef.child(child).put(file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log("Upload is paused");
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log("Upload is running");
-            break;
-        }
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          setAudioUrl(downloadURL);
-        });
-      }
-    );
-  };
-
-  const uploadImageFile = (file) => {
-    if (!file) return;
-    const storageRef = firebase.storage().ref();
-    const child = `image/${file.name} + ${v4()}`;
-    const imageRef = storageRef.child(child);
-    var uploadTask = imageRef.child(child).put(file);
-
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log("Upload is paused");
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log("Upload is running");
-            break;
-        }
-      },
-      (error) => {
-        // Handle unsuccessful uploads
-        console.log(error);
-      },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          setImageUrl(downloadURL);
-        });
-      }
-    );
-  };
+  // const [audioUrl, setAudioUrl] = useState("");
+  // const [imageUrl, setImageUrl] = useState("");
 
   const queryDb = async () => {
     let challengedUserId;
@@ -117,10 +43,15 @@ const Input = () => {
   };
 
   const createPost = async () => {
-
     console.log("creating post...");
     // await uploadAudioFile(audioFile);
     // await uploadImageFile(contentFile);
+    const challengedUserId = await queryDb();
+    if (!challengedUserId) {
+      alert("No user with that display Name exists.");
+      return;
+    }
+    console.log(challengedUserId);
 
     const storageRef = firebase.storage().ref();
     const child = `audio/${audioFile.name} + ${v4()}`;
@@ -144,85 +75,92 @@ const Input = () => {
         console.log(error);
       },
       () => {
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        let audioUrl;
+        uploadTask.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
           console.log("File available at", downloadURL);
-          setAudioUrl(downloadURL);
+          // setAudioUrl(downloadURL);
+          audioUrl = downloadURL;
+          console.log(audioUrl);
+          const storageRef2 = firebase.storage().ref();
+          const child2 = `image/${contentFile.name} + ${v4()}`;
+          const imageRef = storageRef2.child(child2);
+          var uploadTask = imageRef.child(child2).put(contentFile);
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              var progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log("Upload is " + progress + "% done");
+              switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                  console.log("Upload is paused");
+                  break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              // Handle unsuccessful uploads
+              console.log(error);
+            },
+            async () => {
+              let imageUrl;
+              uploadTask.snapshot.ref
+                .getDownloadURL()
+                .then(async (downloadURL) => {
+                  console.log("File available at", downloadURL);
+                  // setImageUrl(downloadURL);
+                  imageUrl = downloadURL;
+                  console.log("image url", imageUrl);
+                  const uid = auth.currentUser.uid;
+                  const postDocRef = db.collection("users").doc(uid);
+                  postDocRef
+                    .collection("posts")
+                    .add({
+                      timestamp:
+                        firebase.firestore.FieldValue.serverTimestamp(),
+                      description: text,
+                      postImage: imageUrl,
+                      audioFile: audioUrl,
+                      challengeTo: challengedUserId,
+                      profileImage: "",
+                      dissedUserName: challengedUser,
+                      likes: 0,
+                      dislikes: 0,
+                      comments: { count: 0, comments: [] },
+                    })
+                    .then((res) => console.log("success!"))
+                    .catch((e) => console.log(e));
+
+                  db.collection("posts")
+                    .add({
+                      timestamp:
+                        firebase.firestore.FieldValue.serverTimestamp(),
+                      description: text,
+                      postImage: imageUrl,
+                      audioFile: audioUrl,
+                      createdBy: auth.currentUser.uid,
+                      challengeTo: challengedUserId,
+                      dissedUserName: challengedUser,
+                      profileImage: "",
+                      likes: 0,
+                      dislikes: 0,
+                      comments: { count: 0, comments: [] },
+                    })
+                    .then(() => {
+                      console.log("successss!");
+                      setText("");
+                      setChallengedUser("");
+                      setAudioFile(null);
+                      setContentFile(null);
+                    });
+                });
+            }
+          );
         });
       }
     );
-
-    const storageRef2 = firebase.storage().ref();
-    const child2 = `image/${contentFile.name} + ${v4()}`;
-    const imageRef = storageRef2.child(child2);
-    var uploadTask = imageRef.child(child2).put(contentFile);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log("Upload is paused");
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log("Upload is running");
-            break;
-        }
-      },
-      (error) => {
-        // Handle unsuccessful uploads
-        console.log(error);
-      },
-      () => {
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          setImageUrl(downloadURL);
-        });
-      }
-    );
-
-    const challengedUserId = await queryDb();
-    if (!challengedUserId) {
-      alert("No user with that display Name exists.");
-      return;
-    }
-    console.log(challengedUserId);
-    const uid = auth.currentUser.uid;
-    const postDocRef = db.collection("users").doc(uid);
-    postDocRef
-      .collection("posts")
-      .add({
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        description: text,
-        postImage: imageUrl,
-        audioFile: audioUrl,
-        challengeTo: challengedUserId,
-        profileImage: "",
-        dissedUserName: challengedUser,
-        likes: 0,
-        dislikes: 0,
-        comments: { count: 0, comments: [] },
-      })
-      .then((res) => console.log("success!"))
-      .catch((e) => console.log(e));
-
-    db.collection("posts").add({
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      description: text,
-      postImage: imageUrl,
-      audioFile: audioUrl,
-      createdBy: auth.currentUser.uid,
-      challengeTo: challengedUserId,
-      dissedUserName: challengedUser,
-      profileImage: "",
-      likes: 0,
-      dislikes: 0,
-      comments: { count: 0, comments: [] },
-    });
-    setText("");
-    setChallengedUser("");
-    setAudioFile(null);
-    setContentFile(null);
   };
 
   return (
