@@ -156,6 +156,11 @@ const Input = ({ posts, getPosts }) => {
                       comments: { count: 0, comments: [] },
                     })
                     .then(async () => {
+                      setText("");
+                      setChallengedUser("");
+                      setAudioFile(null);
+                      setContentFile(null);
+                      setLoading(false);
                       let email;
                       await db
                         .collection("users")
@@ -181,21 +186,15 @@ const Input = ({ posts, getPosts }) => {
                         console.log(res.status);
                         if (res.status === 200) {
                           console.log("Response succeeded!");
-                          setSubmitted(true);
-                          setName("");
-                          setEmail("");
-                          setBody("");
+                          console.log("successss!");
+                          setText("");
+                          setChallengedUser("");
+                          setAudioFile(null);
+                          setContentFile(null);
+                          setLoading(false);
+                          getPosts();
                         }
                       });
-                    })
-                    .then(() => {
-                      console.log("successss!");
-                      setText("");
-                      setChallengedUser("");
-                      setAudioFile(null);
-                      setContentFile(null);
-                      setLoading(false);
-                      getPosts();
                     });
                 });
             }
