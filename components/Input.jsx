@@ -15,7 +15,7 @@ import firebase from "firebase/compat/app";
 import { ref } from "firebase/compat/storage";
 import { v4 } from "uuid";
 
-const Input = () => {
+const Input = ({ posts, getPosts }) => {
   const [text, setText] = useState("");
   const [challengedUser, setChallengedUser] = useState("");
   const [contentFile, setContentFile] = useState();
@@ -24,6 +24,7 @@ const Input = () => {
   const [audioFileToShow, setAudioFileToShow] = useState();
   const imageIconRef = useRef(null);
   const audioFileRef = useRef(null);
+  const [loading, setLoading] = useState(false);
   // const [audioUrl, setAudioUrl] = useState("");
   // const [imageUrl, setImageUrl] = useState("");
 
@@ -44,11 +45,13 @@ const Input = () => {
 
   const createPost = async () => {
     console.log("creating post...");
+    setLoading(true);
     // await uploadAudioFile(audioFile);
     // await uploadImageFile(contentFile);
     const challengedUserId = await queryDb();
     if (!challengedUserId) {
       alert("No user with that display Name exists.");
+      setLoading(false)
       return;
     }
     console.log(challengedUserId);
@@ -73,6 +76,7 @@ const Input = () => {
       },
       (error) => {
         console.log(error);
+        alert(error);
       },
       () => {
         let audioUrl;
@@ -103,6 +107,7 @@ const Input = () => {
             (error) => {
               // Handle unsuccessful uploads
               console.log(error);
+              alert(error);
             },
             async () => {
               let imageUrl;
@@ -124,6 +129,7 @@ const Input = () => {
                       postImage: imageUrl,
                       audioFile: audioUrl,
                       challengeTo: challengedUserId,
+                      createdByAuthor: auth.currentUser.displayName,
                       profileImage: "",
                       dissedUserName: challengedUser,
                       likes: 0,
@@ -141,6 +147,7 @@ const Input = () => {
                       postImage: imageUrl,
                       audioFile: audioUrl,
                       createdBy: auth.currentUser.uid,
+                      createdByAuthor: auth.currentUser.displayName,
                       challengeTo: challengedUserId,
                       dissedUserName: challengedUser,
                       profileImage: "",
@@ -154,6 +161,8 @@ const Input = () => {
                       setChallengedUser("");
                       setAudioFile(null);
                       setContentFile(null);
+                      setLoading(false);
+                      getPosts();
                     });
                 });
             }
@@ -179,6 +188,7 @@ const Input = () => {
           onChange={(evt) => {
             setText(evt.target.value);
           }}
+          value={text}
         />
         <textarea
           className="w-full h-6 bg-transparent outline-none mb-2 px-2 text-lg "
@@ -186,6 +196,7 @@ const Input = () => {
           onChange={(evt) => {
             setChallengedUser(evt.target.value);
           }}
+          value={challengedUser}
         />
         {contentFile ? <div>Photo:</div> : null}
         {contentFile ? (
@@ -291,10 +302,12 @@ const Input = () => {
           </div>
           <button
             className="button py-1 rounded-full w-1/4 max-w-[100px] mr-3 hover:border-twit-blue disabled:opacity-40 border-2 disabled:hover:border-twit-red"
-            disabled={!(text && challengedUser) || !audioFile || !contentFile}
+            disabled={
+              !(text && challengedUser) || !audioFile || !contentFile || loading
+            }
             onClick={createPost}
           >
-            Post
+            {loading ? "Loading..." : "Post"}
           </button>
         </div>
       </div>

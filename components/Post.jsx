@@ -66,11 +66,12 @@ const Post = ({
         {postImage ? (
           <div>
             <Image
-              width={40}
-              height={40}
+              width={50}
+              height={50}
               src={postImage}
+              onLoadingComplete={(e) => console.log(e)}
               alt="Post Image"
-              className="rounded-3xl max-h-80 w-full object-contain"
+              className="h-auto rounded-3xl max-h-80 w-full object-contain"
             />
           </div>
         ) : (

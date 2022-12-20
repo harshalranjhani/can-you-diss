@@ -7,49 +7,30 @@ import { db, auth } from "../utils/firebase";
 
 import { user } from "../data/user";
 
-const Posts = () => {
+const Posts = ({posts}) => {
   // const posts = useSelector((state) => state.post.posts);
   // console.table(posts);
 
-  const [posts, setPosts] = useState([]);
-  let p = [];
-  const getPosts = useCallback(async () => {
-    await db
-      .collection("posts")
-      .get()
-      .then((querySnapshot) => {
-        // setPosts(querySnapshot.);
-        // console.log(posts);
-        querySnapshot.forEach((doc) => {
-          p.push(doc.data());
-        });
-        setPosts(p);
-      });
-  }, []);
-  useEffect(() => {
-    getPosts();
-  }, [getPosts]);
 
   return (
     <div className="w-full">
-      {posts.length &&
-        posts.map((post) => {
-          return (
-            <Post
-              key={post.id}
-              id={post.id}
-              username={auth.currentUser.displayName}
-              profilePicture={user.profilePicture}
-              description={post.description}
-              postImage={post.postImage}
-              audioFile={post.audioFile}
-              dissedUserName={post.dissedUserName}
-              likes={post.likes}
-              dislikes={post.dislikes}
-              comments={20}
-            />
-          );
-        })}
+      {posts.map((post) => {
+        return (
+          <Post
+            key={post.id}
+            id={post.id}
+            username={post.createdByAuthor}
+            profilePicture={user.profilePicture}
+            description={post.description}
+            postImage={post.postImage}
+            audioFile={post.audioFile}
+            dissedUserName={post.dissedUserName}
+            likes={post.likes}
+            dislikes={post.dislikes}
+            comments={20}
+          />
+        );
+      })}
 
       {!posts.length && <h1 className="text-white">No Posts Found.</h1>}
     </div>
