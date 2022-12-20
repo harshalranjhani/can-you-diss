@@ -36,14 +36,14 @@ const ProfilePage = () => {
       });
     return challengedUserId;
   };
-  const func = (callback) => {
-    callback(id);
-  };
-  useEffect(() => {
-    setTimeout(() => {
-      func(queryDb);
-    }, 2000);
-  }, []);
+  // const func = (callback) => {
+  //   callback(id);
+  // };
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     func(queryDb);
+  //   }, 2000);
+  // }, []);
 
   // let user = queryDb(id);
   return (

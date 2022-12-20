@@ -51,7 +51,7 @@ const Input = ({ posts, getPosts }) => {
     const challengedUserId = await queryDb();
     if (!challengedUserId) {
       alert("No user with that display Name exists.");
-      setLoading(false)
+      setLoading(false);
       return;
     }
     console.log(challengedUserId);
@@ -154,6 +154,39 @@ const Input = ({ posts, getPosts }) => {
                       likes: 0,
                       dislikes: 0,
                       comments: { count: 0, comments: [] },
+                    })
+                    .then(async () => {
+                      let email;
+                      await db
+                        .collection("users")
+                        .doc(challengedUserId)
+                        .get()
+                        .then((doc) => {
+                          console.log(doc.data().email);
+                          email = doc.data().email;
+                        });
+                      await fetch("/api/contact", {
+                        method: "POST",
+                        headers: {
+                          Accept: "application/json, text/plain, */*",
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          email,
+                          challengedBy: auth.currentUser.displayName,
+                          message: text,
+                        }),
+                      }).then((res) => {
+                        console.log("Response received");
+                        console.log(res.status);
+                        if (res.status === 200) {
+                          console.log("Response succeeded!");
+                          setSubmitted(true);
+                          setName("");
+                          setEmail("");
+                          setBody("");
+                        }
+                      });
                     })
                     .then(() => {
                       console.log("successss!");
