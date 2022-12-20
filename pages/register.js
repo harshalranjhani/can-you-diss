@@ -15,6 +15,7 @@ import Container from "@mui/material/Container";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { auth, db } from "../utils/firebase";
+import { useRouter } from "next/router";
 
 function Copyright(props) {
   return (
@@ -41,19 +42,11 @@ const theme = createTheme({
 });
 
 export default function SignUp() {
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get("email"),
-  //     password: data.get("password"),
-  //   });
-  // };
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = () => {
     auth
@@ -88,7 +81,11 @@ export default function SignUp() {
         });
       })
 
-      .then(() => console.log("success!"))
+      .then(() => {
+        console.log("success!");
+        router.replace("/");
+        alert("Welcome User!");
+      })
       .catch((e) => alert(e.message));
   };
 

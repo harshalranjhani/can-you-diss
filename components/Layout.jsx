@@ -20,7 +20,6 @@ const Layout = () => {
         querySnapshot.forEach((doc) => {
           // p.push(doc.data());
           p.unshift(doc.data());
-          console.log(doc.data().createdByAuthor);
         });
         setPosts(p);
       });

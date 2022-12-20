@@ -56,6 +56,8 @@ export default function SignIn() {
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         console.log("user authenticated!");
+        router.replace("/");
+        alert("Welcome back!");
       })
       .catch((e) => alert(e.message));
     dispatch(authActions.login({ currentUser: auth.currentUser }));
