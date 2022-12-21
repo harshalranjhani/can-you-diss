@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { user } from "../data/user";
+import { user } from "../data/user.js";
 
 import { inputIcons } from "./../assets/Icons.js";
 import CloseIcon from "@mui/icons-material/Close";

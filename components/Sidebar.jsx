@@ -3,7 +3,7 @@ import Profile from "./Profile";
 import Link from "next/link";
 import Image from "next/image";
 
-import { user } from "../data/user";
+import { user } from "../data/user.js";
 
 import triangle from "./../assets/penrose-triangle.png";
 

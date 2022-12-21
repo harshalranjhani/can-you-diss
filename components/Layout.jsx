@@ -5,7 +5,7 @@ import { db } from "../utils/firebase";
 import Posts from "./Posts";
 import { useState, useCallback, useEffect } from "react";
 
-import posts from "../data/posts";
+import posts from "../data/posts.js";
 
 const Layout = () => {
   const [posts, setPosts] = useState([]);

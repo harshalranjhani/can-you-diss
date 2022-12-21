@@ -5,7 +5,7 @@ import { postActions } from "../store/post-slice";
 import { useEffect, useState, useCallback } from "react";
 import { db, auth } from "../utils/firebase";
 
-import { user } from "../data/user";
+import { user } from "../data/user.js";
 
 const Posts = ({posts}) => {
   // const posts = useSelector((state) => state.post.posts);

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import audio from "../data/audio";
+import audio from "../data/audio.js";
 
 import ACTIONS from "./actions";
 
