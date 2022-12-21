@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { user } from "../data/user";
 
-import { inputIcons } from "../assets/Icons";
+import { inputIcons } from "../assets/Icons.js";
 import CloseIcon from "@mui/icons-material/Close";
 
 import Image from "next/image";
