@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { NavbarIcons } from "../assets/icons";
-import profilePicture from "../assets/profile_picture.svg";
+import { NavbarIcons } from "./../assets/icons";
+import profilePicture from "./../assets/profile_picture.svg";
 
 import Image from "next/image";
 import Link from "next/link";

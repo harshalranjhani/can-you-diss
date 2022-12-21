@@ -3,7 +3,7 @@ import TagUser from "./TagUser";
 import Image from "next/image";
 import Link from "next/link";
 
-import { postIcons } from "../assets/icons";
+import { postIcons } from "./../assets/icons";
 
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";

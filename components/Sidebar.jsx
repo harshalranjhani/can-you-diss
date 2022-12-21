@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { user } from "../data/user";
 
-import triangle from "../assets/penrose-triangle.png";
+import triangle from "./../assets/penrose-triangle.png";
 
 const Sidebar = () => {
   return (

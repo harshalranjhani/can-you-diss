@@ -1,4 +1,4 @@
-import { outlinedIcons } from "../assets/icons";
+import { outlinedIcons } from "./../assets/icons";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 const SidebarMenu = () => {

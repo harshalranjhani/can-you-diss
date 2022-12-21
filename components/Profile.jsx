@@ -1,5 +1,5 @@
 import Image from "next/image";
-import profilePicture from "../assets/profile_picture.svg";
+import profilePicture from "./../assets/profile_picture.svg";
 import { user } from "../data/user.js";
 
 const Profile = ({ name, username, pfp }) => {

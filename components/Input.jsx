@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
 import { user } from "../data/user";
 
-import { inputIcons } from "../assets/Icons.js";
+import { inputIcons } from "./../assets/Icons.js";
 import CloseIcon from "@mui/icons-material/Close";
 
 import Image from "next/image";
 
-import ProfilePicture from "../assets/profile_picture.svg";
+import ProfilePicture from "./../assets/profile_picture.svg";
 
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
