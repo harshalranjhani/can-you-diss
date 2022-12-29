@@ -39,4 +39,8 @@
   .post-actions {
     @apply w-12 h-12 flex flex-col space-y-1 items-center justify-center rounded-full bg-transparent;
   }
+
+  .search-results-div {
+    @apply bg-black top-[69px] w-full xl:left-[374px] border-b-2 lg:border-x-2 p-4 border-border-gray xl:w-1/3 hover:opacity-70 transition-all duration-300
+  }
 }
