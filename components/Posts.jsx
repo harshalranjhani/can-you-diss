@@ -1,17 +1,7 @@
 import Post from "./Post";
-
-import { useSelector } from "react-redux";
-import { postActions } from "../store/post-slice";
-import { useEffect, useState, useCallback } from "react";
-import { db, auth } from "../utils/firebase";
-
 import { user } from "../data/user.js";
 
-const Posts = ({posts}) => {
-  // const posts = useSelector((state) => state.post.posts);
-  // console.table(posts);
-
-
+const Posts = ({ posts }) => {
   return (
     <div className="w-full">
       {posts.map((post) => {

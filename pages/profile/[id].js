@@ -11,6 +11,8 @@ import "react-h5-audio-player/lib/styles.css";
 
 import { useRouter } from "next/router";
 
+import Posts from "../../components/Posts";
+
 export const ProfilePageLayout = ({ children }) => {
   return (
     <div className="h-screen w-screen flex justify-end">
@@ -34,37 +36,69 @@ const ProfilePage = () => {
   const [posts, setPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(false);
 
-  // const dispatch = useDispatch();
-  // const getPosts = useCallback(async () => {
-  //   await db
-  //     .collection("posts")
-  //     .get()
-  //     .then((querySnapshot) => {
-  //       // setPosts(querySnapshot.);
-  //       // console.log(posts);
-  //       querySnapshot.forEach((doc) => {
-  //         // p.push(doc.data());
-  //         p.unshift({ ...doc.data(), id: doc.id });
-  //       });
-  //       setPosts(p);
-  //       dispatch(postActions.setPosts({ posts: p }));
-  //     });
-  // }, [p]);
-  // useEffect(() => {
-  //   getPosts();
-  // }, [getPosts]);
+  // Changed not working version
   useEffect(() => {
-    setLoadingUser(true);
-    setUser(null);
-    onSnapshot(query(collection(db, "users")), (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        if (doc.data().displayName === id) {
-          setUser(doc.data());
-        }
-      });
-    });
-    setLoadingUser(false);
-  }, [db, id]);
+    let docId;
+    let p = [];
+    const getUserAndPosts = async () => {
+      setLoadingUser(true);
+      setUser(null);
+      await db
+        .collection("users")
+        .where("displayName", "==", id)
+        .get()
+        .then((snapshot) => {
+          setUser(snapshot.docs[0].data());
+          console.log(snapshot.docs[0].data());
+          docId = snapshot.docs[0].id;
+        })
+        .catch((err) => {
+          alert("could not find the user");
+        });
+      setLoadingUser(false);
+      setLoadingPosts(true);
+      await db
+        .collection("users")
+        .doc(docId)
+        .collection("posts")
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((post) => {
+            p.push(post.data());
+          });
+          setPosts(p);
+        });
+      setLoadingPosts(false);
+    };
+
+    if (router.isReady) {
+      getUserAndPosts();
+    }
+  }, [db, id, router.isReady]);
+
+  // INITIAL WORKING VERSION
+  // useEffect(() => {
+  //   setLoadingUser(true);
+  //   setUser(null);
+  //   onSnapshot(query(collection(db, "users")), (snapshot) => {
+  //     snapshot.docs.forEach((doc) => {
+  //       if (doc.data().displayName === id) {
+  //         setUser(doc.data());
+  //         db.collection("users")
+  //           .doc(doc.id)
+  //           .collection("posts")
+  //           .get()
+  //           .then((snapshot) => {
+  //             snapshot.forEach((dx) => {
+  //               console.log(dx.data());
+  //             });
+  //           });
+  //         console.log(doc.id);
+  //       }
+  //     });
+  //   });
+  //   setLoadingUser(false);
+  // }, [db, id]);
   return (
     <ProfilePageLayout>
       <div className="w-full h-full px-4">
@@ -86,7 +120,14 @@ const ProfilePage = () => {
                   @{user.username}
                 </p>
               </span>
-              <button>Challenge User</button>
+              <button
+                className="button text-sm w-[90px] lg:w-[150px]"
+                onClick={() => {
+                  router.replace("/");
+                }}
+              >
+                Challenge User
+              </button>
             </div>
             <div className="flex justify-start space-x-4">
               <span className="font-bold">
@@ -95,6 +136,10 @@ const ProfilePage = () => {
               <span className="font-semibold">
                 {user.losses} <span className="text-gray-300">Losses</span>
               </span>
+            </div>
+            <div>
+              <h3>Posts</h3>
+              {!loadingPosts ? <Posts posts={posts} /> : null}
             </div>
           </div>
         ) : (
