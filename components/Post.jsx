@@ -11,8 +11,6 @@ import "react-h5-audio-player/lib/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { postActions } from "../store/post-slice";
 
-import ACTIONS from "../store/actions";
-
 const Post = ({
   id,
   username,
@@ -82,14 +80,8 @@ const Post = ({
             className="post-actions hover:bg-onhover-green hover:text-twit-green transition-all duration-300"
             onClick={() => {
               console.log("like button pressed");
-              dispatch(
-                postActions.likeDislikePost(state, {
-                  payload: {
-                    type: ACTIONS.like,
-                    id: id,
-                  },
-                })
-              );
+              console.log(id);
+              dispatch(postActions.likePost({ postDocId: id }));
             }}
           >
             <postIcons.like height={20} className="" />
@@ -99,14 +91,7 @@ const Post = ({
             className="post-actions hover:bg-onhover-red hover:text-twit-red transition-all duration-300"
             onClick={() => {
               console.log("dislike button pressed");
-              dispatch(
-                postActions.likeDislikePost(state, {
-                  payload: {
-                    type: ACTIONS.dis,
-                    id: id,
-                  },
-                })
-              );
+              dispatch(postActions.dislikePost({ postDocId: id }));
             }}
           >
             <postIcons.dislike height={20} />
@@ -120,13 +105,7 @@ const Post = ({
             className="post-actions hover:bg-onhover-blue hover:text-twit-blue transition-all duration-300"
             onClick={() => {
               console.log("delte button pressed");
-              dispatch(
-                postActions.deletePost(state, {
-                  payload: {
-                    id: id,
-                  },
-                })
-              );
+              dispatch(postActions.deletePost({ id }));
             }}
           >
             <postIcons.trash height={20} />

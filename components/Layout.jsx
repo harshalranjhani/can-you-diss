@@ -6,8 +6,11 @@ import Posts from "./Posts";
 import { useState, useCallback, useEffect } from "react";
 
 import posts from "../data/posts.js";
+import { useDispatch } from "react-redux";
+import { postActions } from "../store/post-slice";
 
 const Layout = () => {
+  const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
   let p = [];
   const getPosts = useCallback(async () => {
@@ -19,9 +22,10 @@ const Layout = () => {
         // console.log(posts);
         querySnapshot.forEach((doc) => {
           // p.push(doc.data());
-          p.unshift(doc.data());
+          p.unshift({ ...doc.data(), id: doc.id });
         });
         setPosts(p);
+        dispatch(postActions.setPosts({ posts: p }));
       });
   }, [p]);
   useEffect(() => {

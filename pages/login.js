@@ -57,10 +57,10 @@ export default function SignIn() {
       .then(() => {
         console.log("user authenticated!");
         router.replace("/");
+        dispatch(authActions.login({ user: auth.currentUser }));
         alert("Welcome back!");
       })
       .catch((e) => alert(e.message));
-    dispatch(authActions.login({ currentUser: auth.currentUser }));
   };
 
   return (

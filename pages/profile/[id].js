@@ -54,6 +54,7 @@ const ProfilePage = () => {
         <div className="app-container w-full flex justify-center">
           <div className="w-full xl:w-2/3 flex flex-col items-center">
             {/* Posts */}
+            <h1>Currently logged in as : </h1>
           </div>
         </div>
       </main>
