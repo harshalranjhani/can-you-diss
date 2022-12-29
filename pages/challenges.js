@@ -1,0 +1,67 @@
+import React, { useEffect, useState } from "react";
+import { auth, db } from "../utils/firebase";
+
+function Challenges() {
+  const [challenges, setChallenges] = useState([]);
+
+  useEffect(() => {
+    if (!auth.currentUser) {
+      console.log("Null user");
+      console.log(auth.currentUser);
+      return;
+    }
+
+    let challengesArray = [];
+    db.collection("challengedUsers")
+      .where("challengeTo", "==", auth.currentUser.uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          challengesArray.push({ ...doc.data(), id: doc.id });
+        });
+      })
+      .then(() => {
+        setChallenges(challengesArray);
+        console.log(challenges);
+        console.log(auth.currentUser);
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+  }, []);
+
+  const acceptChallenge = (id) => {
+    console.log(id);
+    db.collection("challengedUsers")
+      .doc(id)
+      .update({ challengeAccepted: true });
+  };
+
+  return (
+    <>
+      <h1>Challenges for you so far!</h1>
+      {challenges.map((doc) => (
+        <>
+          <h3 key={doc._id}>Name: {doc.name}</h3>
+          <h3>
+            Challenge Accepted:{" "}
+            <span style={{ color: "red" }}>
+              {doc.challengeAccepted ? "True" : "False"}
+            </span>
+          </h3>
+          <h1>Accept Challenge? </h1>
+          <button
+            style={{ color: "blue" }}
+            onClick={() => {
+              acceptChallenge(doc.id);
+            }}
+          >
+            Yes
+          </button>
+        </>
+      ))}
+    </>
+  );
+}
+
+export default Challenges;

@@ -46,12 +46,25 @@ const Input = ({ posts, getPosts }) => {
   const createPost = async () => {
     console.log("creating post...");
     setLoading(true);
-    // await uploadAudioFile(audioFile);
-    // await uploadImageFile(contentFile);
+    if (!auth.currentUser) {
+      alert("Login to continue.");
+      setText("");
+      setChallengedUser("");
+      setAudioFile(null);
+      setContentFile(null);
+      setLoading(false);
+      getPosts();
+      return;
+    }
     const challengedUserId = await queryDb();
     if (!challengedUserId) {
       alert("No user with that display Name exists.");
+      setText("");
+      setChallengedUser("");
+      setAudioFile(null);
+      setContentFile(null);
       setLoading(false);
+      getPosts();
       return;
     }
     console.log(challengedUserId);
@@ -154,6 +167,18 @@ const Input = ({ posts, getPosts }) => {
                       likes: 0,
                       dislikes: 0,
                       comments: { count: 0, comments: [] },
+                    })
+                    .then(() => {
+                      db.collection("challengedUsers").add({
+                        timestamp:
+                          firebase.firestore.FieldValue.serverTimestamp(),
+                        challengeTo: challengedUserId,
+                        name: challengedUser,
+                        createdBy: auth.currentUser.uid,
+                        challengeAccepted: false,
+                        isLoser: false,
+                        profileImage: "",
+                      });
                     })
                     .then(async () => {
                       setText("");
