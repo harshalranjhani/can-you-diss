@@ -1,5 +1,7 @@
 import Post from "./Post";
+import { useEffect } from "react";
 import { user } from "../data/user.js";
+import { auth } from "../utils/firebase";
 
 const Posts = ({ posts }) => {
   return (
@@ -10,7 +12,7 @@ const Posts = ({ posts }) => {
             key={post.id}
             id={post.id}
             username={post.createdByAuthor}
-            profilePicture={user.profilePicture}
+            profilePicture={auth.currentUser.photoURL}
             description={post.description}
             postImage={post.postImage}
             audioFile={post.audioFile}
@@ -22,7 +24,11 @@ const Posts = ({ posts }) => {
         );
       })}
 
-      {!posts.length && <h1 className="text-white">No Posts Found.</h1>}
+      {!posts.length && (
+        <>
+          <h1 className="text-white">No Posts Found.</h1>
+        </>
+      )}
     </div>
   );
 };

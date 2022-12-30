@@ -10,7 +10,7 @@ import ProfilePicture from "./../assets/profile_picture.svg";
 
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-import { auth, db, storage } from "../utils/firebase";
+import { auth, db } from "../utils/firebase";
 import firebase from "firebase/compat/app";
 import { ref } from "firebase/compat/storage";
 import { v4 } from "uuid";
@@ -143,7 +143,7 @@ const Input = ({ posts, getPosts }) => {
                       audioFile: audioUrl,
                       challengeTo: challengedUserId,
                       createdByAuthor: auth.currentUser.displayName,
-                      profileImage: "",
+                      profileImage: auth.currentUser.photoURL,
                       dissedUserName: challengedUser,
                       likes: 0,
                       dislikes: 0,
@@ -163,7 +163,7 @@ const Input = ({ posts, getPosts }) => {
                       createdByAuthor: auth.currentUser.displayName,
                       challengeTo: challengedUserId,
                       dissedUserName: challengedUser,
-                      profileImage: "",
+                      profileImage: auth.currentUser.photoURL,
                       likes: 0,
                       dislikes: 0,
                       comments: { count: 0, comments: [] },
@@ -178,7 +178,7 @@ const Input = ({ posts, getPosts }) => {
                         createdBy: auth.currentUser.uid,
                         challengeAccepted: false,
                         isLoser: false,
-                        profileImage: "",
+                        profileImage: auth.currentUser.photoURL,
                       });
                     })
                     .then(async () => {
@@ -235,7 +235,7 @@ const Input = ({ posts, getPosts }) => {
       <Image
         height={20}
         width={20}
-        src={ProfilePicture}
+        src={auth.currentUser?.photoURL}
         className="h-14 w-16 rounded-full mr-2 hover:opacity-60 transition-opacity"
         alt="User's Profile Picture"
       />

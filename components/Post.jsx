@@ -7,9 +7,9 @@ import { postIcons } from "./../assets/Icons.js";
 
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-
 import { useDispatch, useSelector } from "react-redux";
 import { postActions } from "../store/post-slice";
+import { useEffect } from "react";
 
 const Post = ({
   id,
