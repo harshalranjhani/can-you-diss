@@ -40,6 +40,11 @@
     @apply w-12 h-12 flex flex-col space-y-1 items-center justify-center rounded-full bg-transparent;
   }
 
+  .input {
+    @apply text-txt-white text-base mb-2 px-3 py-2 rounded-lg shadow-lg bg-bg-black border-2 border-gray-500 hover:border-dazzled-blue transition-all focus:outline-none focus:border-twit-blue focus:ring-1 focus:ring-black;
+  }
+
+
   .search-results-div {
     @apply bg-black top-[69px] w-full xl:left-[374px] border-b-2 lg:border-x-2 p-4 border-border-gray xl:w-1/3 hover:opacity-70 transition-all duration-300
   }
