@@ -22,9 +22,9 @@ const Input = ({ posts, getPosts }) => {
   const [audioFile, setAudioFile] = useState();
   const [contentFileToShow, setContentFileToShow] = useState();
   const [audioFileToShow, setAudioFileToShow] = useState();
+  const [loading, setLoading] = useState(false);
   const imageIconRef = useRef(null);
   const audioFileRef = useRef(null);
-  const [loading, setLoading] = useState(false);
   // const [audioUrl, setAudioUrl] = useState("");
   // const [imageUrl, setImageUrl] = useState("");
 

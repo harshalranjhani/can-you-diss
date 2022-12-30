@@ -1,16 +1,9 @@
 import { Fragment, useEffect } from "react";
 import Layout from "../components/Layout";
-import { db } from "../utils/firebase";
+import { auth, db } from "../utils/firebase";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  useEffect(() => {
-    db.collection("posts")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => console.log(doc.data()));
-      });
-  }, []);
-
   return (
     <Fragment>
       <Layout />

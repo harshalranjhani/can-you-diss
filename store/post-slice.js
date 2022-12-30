@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-import { audio } from "../data/audio.js";
 import { db } from "../utils/firebase.js";
 import firebase from "firebase/compat/app";
 
@@ -11,8 +9,7 @@ const postSlice = createSlice({
   },
   reducers: {
     setPosts(state, action) {
-      const newState = action.payload;
-      return newState;
+      return action.payload;
     },
     async likePost(state, action) {
       const increment = firebase.firestore.FieldValue.increment(1);

@@ -1,15 +1,26 @@
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Input from "./Input";
-import { db } from "../utils/firebase";
+import { auth, db } from "../utils/firebase";
 import Posts from "./Posts";
 import { useState, useCallback, useEffect } from "react";
 
-import posts from "../data/posts.js";
+import { useRouter } from "next/router";
+
 import { useDispatch } from "react-redux";
 import { postActions } from "../store/post-slice";
 
 const Layout = () => {
+  const router = useRouter();
+  useEffect(() => {
+    const checkUser = () => {
+      if (auth.currentUser === null) {
+        router.replace("/login");
+      }
+    };
+    checkUser();
+  }, []);
+
   const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
   let p = [];
@@ -18,10 +29,7 @@ const Layout = () => {
       .collection("posts")
       .get()
       .then((querySnapshot) => {
-        // setPosts(querySnapshot.);
-        // console.log(posts);
         querySnapshot.forEach((doc) => {
-          // p.push(doc.data());
           p.unshift({ ...doc.data(), id: doc.id });
         });
         setPosts(p);
@@ -29,8 +37,11 @@ const Layout = () => {
       });
   }, [p]);
   useEffect(() => {
-    getPosts();
+    if (auth.currentUser !== null) {
+      getPosts();
+    }
   }, [getPosts]);
+
   return (
     <div className="h-screen w-screen flex justify-end">
       <Sidebar />
@@ -40,7 +51,6 @@ const Layout = () => {
           <div className="w-full xl:w-2/3 flex flex-col items-center">
             <Input posts={posts} getPosts={getPosts} />
             <Posts posts={posts} />
-            {/* Posts */}
           </div>
         </div>
       </main>
