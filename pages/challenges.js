@@ -4,6 +4,7 @@ import { auth, db } from "../utils/firebase";
 
 function Challenges() {
   const [challenges, setChallenges] = useState([]);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   useEffect(() => {
     if (!auth.currentUser) {
@@ -11,7 +12,7 @@ function Challenges() {
       console.log(auth.currentUser);
       return;
     }
-
+    setLoading(true);
     let challengesArray = [];
     db.collection("challengedUsers")
       .where("challengeTo", "==", auth.currentUser.uid)
@@ -29,6 +30,7 @@ function Challenges() {
       .catch((error) => {
         console.log("Error getting documents: ", error);
       });
+    setLoading(false);
   }, []);
 
   const acceptChallenge = (id) => {
@@ -43,26 +45,30 @@ function Challenges() {
   return (
     <>
       <h1>Challenges for you so far!</h1>
-      {challenges.map((doc) => (
-        <>
-          <h3 key={doc._id}>Name: {doc.challengedBy}</h3>
-          <h3>
-            Challenge Accepted:{" "}
-            <span style={{ color: doc.challengeAccepted ? "green" : "red" }}>
-              {doc.challengeAccepted ? "True" : "False"}
-            </span>
-          </h3>
-          <h1>Accept Challenge? </h1>
-          <button
-            style={{ color: "blue" }}
-            onClick={() => {
-              acceptChallenge(doc.id);
-            }}
-          >
-            Yes
-          </button>
-        </>
-      ))}
+      {!loading
+        ? challenges.map((doc) => (
+            <>
+              <h3 key={doc._id}>Name: {doc.challengedBy}</h3>
+              <h3>
+                Challenge Accepted:{" "}
+                <span
+                  style={{ color: doc.challengeAccepted ? "green" : "red" }}
+                >
+                  {doc.challengeAccepted ? "True" : "False"}
+                </span>
+              </h3>
+              <h1>Accept Challenge? </h1>
+              <button
+                style={{ color: "blue" }}
+                onClick={() => {
+                  acceptChallenge(doc.id);
+                }}
+              >
+                Yes
+              </button>
+            </>
+          ))
+        : null}
       {!challenges.length && <h1>Yay! No challenges for now!</h1>}
       <br />
       <button
