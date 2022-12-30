@@ -174,6 +174,7 @@ const Input = ({ posts, getPosts }) => {
                           firebase.firestore.FieldValue.serverTimestamp(),
                         challengeTo: challengedUserId,
                         name: challengedUser,
+                        challengedBy: auth.currentUser.displayName,
                         createdBy: auth.currentUser.uid,
                         challengeAccepted: false,
                         isLoser: false,
