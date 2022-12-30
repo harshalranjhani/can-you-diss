@@ -1,9 +1,10 @@
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../utils/firebase";
 
 function Challenges() {
   const [challenges, setChallenges] = useState([]);
-
+  const router = useRouter();
   useEffect(() => {
     if (!auth.currentUser) {
       console.log("Null user");
@@ -35,6 +36,8 @@ function Challenges() {
     db.collection("challengedUsers")
       .doc(id)
       .update({ challengeAccepted: true });
+
+    router.push(`/accept-challenge/${id}`);
   };
 
   return (
@@ -42,10 +45,10 @@ function Challenges() {
       <h1>Challenges for you so far!</h1>
       {challenges.map((doc) => (
         <>
-          <h3 key={doc._id}>Name: {doc.name}</h3>
+          <h3 key={doc._id}>Name: {doc.challengedBy}</h3>
           <h3>
             Challenge Accepted:{" "}
-            <span style={{ color: "red" }}>
+            <span style={{ color: doc.challengeAccepted ? "green" : "red" }}>
               {doc.challengeAccepted ? "True" : "False"}
             </span>
           </h3>
@@ -60,6 +63,15 @@ function Challenges() {
           </button>
         </>
       ))}
+      {!challenges.length && <h1>Yay! No challenges for now!</h1>}
+      <br />
+      <button
+        onClick={() => {
+          router.push("/");
+        }}
+      >
+        GO BACK
+      </button>
     </>
   );
 }
