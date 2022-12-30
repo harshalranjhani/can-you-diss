@@ -1,67 +1,40 @@
-import * as React from "react";
-import { useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "next/link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { auth, db } from "../utils/firebase";
+import { useState, useRef, useId } from "react";
 import { useRouter } from "next/router";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
+import Image from "next/image";
+import Link from "next/link";
 
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
+import { auth, db, storage } from "../utils/firebase";
+import firebase from "firebase/compat/app";
+import { v4 } from "uuid";
+
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 export default function SignUp() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+  const pictureInputRef = useRef();
   const router = useRouter();
 
-  const handleSubmit = () => {
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
         const uid = authUser.user.uid;
         const userDocRef = db.collection("users").doc(uid);
         userDocRef.set({
-          displayName:
-            firstName.charAt(0).toUpperCase() +
-            firstName.slice(1) +
-            " " +
-            lastName.charAt(0).toUpperCase() +
-            lastName.slice(1),
-          username: "rapper123",
+          displayName: name,
+          username: username,
           loser: false,
           wins: 0,
           losses: 0,
@@ -72,12 +45,7 @@ export default function SignUp() {
           email: email,
         });
         authUser.user.updateProfile({
-          displayName:
-            firstName.charAt(0).toUpperCase() +
-            firstName.slice(1) +
-            " " +
-            lastName.charAt(0).toUpperCase() +
-            lastName.slice(1),
+          displayName: name,
         });
       })
 
@@ -87,109 +55,286 @@ export default function SignUp() {
         alert("Welcome User!");
       })
       .catch((e) => alert(e.message));
-  };
 
+    const storage = getStorage();
+
+    // Create the file metadata
+    /** @type {any} */
+    const metadata = {
+      contentType: "image/jpeg",
+    };
+
+    // Upload file and metadata to the object 'images/mountains.jpg'
+    const storageRef = ref(storage, "images/" + profilePicture.name + v4());
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        alert(error);
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+        });
+      }
+    );
+  };
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <HowToRegIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="div" noValidate sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  onChange={(evt) => {
-                    setFirstName(evt.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  onChange={(evt) => {
-                    setLastName(evt.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange={(evt) => {
-                    setEmail(evt.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  onChange={(evt) => {
-                    setPassword(evt.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="outlined"
-              onClick={handleSubmit}
-              sx={{ mt: 3, mb: 2 }}
+    // <div className="h-screen w-screen flex flex-col justify-center items-center">
+    //   <div className="border-2 border-border-gray p-8 rounded-lg space-y-2">
+    //     <h1 className="text-3xl font-black ">Can You Diss</h1>
+    //     <form className="flex flex-col">
+    //       <label>E-Mail</label>
+    //       <input
+    //         type="email"
+    //         className="input"
+    //         onChange={(evt) => {
+    //           setEmail(evt.target.value);
+    //         }}
+    //       />
+    //       <label>Password</label>
+    //       <input
+    //         type="password"
+    //         className="input"
+    //         onChange={(evt) => {
+    //           setPassword(evt.target.value);
+    //         }}
+    //       />
+    //     </form>
+    //     <div>
+    //       <Link href="/register">
+    //         <button className="button" onClick={handleSubmit}>
+    //           Login
+    //         </button>
+    //       </Link>
+    //     </div>
+
+    //     <div>
+    //       <p>Dont have an Account?</p>
+    //       <Link href="/register">Register</Link>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <div className="h-screen w-screen flex flex-col items-center justify-center">
+      <div className="w-[300px] lg:w-[350px]">
+        <div>
+          <h1 className="text-3xl font-extrabold">Can You Diss</h1>
+        </div>
+        <form className="flex flex-col">
+          <label>Name</label>
+          <input
+            type="text"
+            name="Name"
+            className="input"
+            onChange={(evt) => {
+              setName(evt.target.value);
+            }}
+          />
+          <label>Username</label>
+          <input
+            type="text"
+            name="Username"
+            className="input"
+            onChange={(evt) => {
+              setUsername(evt.target.value);
+            }}
+          />
+          <label>E-Mail</label>
+          <input
+            type="email"
+            name="email"
+            className="input"
+            onChange={(evt) => {
+              setEmail(evt.target.value);
+            }}
+          />
+          <label>Password</label>
+          <input
+            type="password"
+            name="Password"
+            className="input"
+            onChange={(evt) => {
+              setPassword(evt.target.value);
+            }}
+          />
+          <div
+            className="flex space-x-2 cursor-pointer"
+            onClick={() => {
+              pictureInputRef.current.click();
+            }}
+          >
+            <span>Profile Picture</span>
+            <div>
+              <InsertPhotoOutlinedIcon sx={{ fontSize: "26px" }} />
+            </div>
+          </div>
+          {profilePicture ? (
+            <span
+              className="text-red-600 underline cursor-pointer"
+              onClick={() => {
+                setProfilePicture(null);
+              }}
             >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/login">Already have an account? Sign in</Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <Copyright sx={{ mt: 5 }} />
-      </Container>
-    </ThemeProvider>
+              Remove
+            </span>
+          ) : null}
+          <input
+            type="file"
+            name="Profile Picture"
+            onChange={(evt) => {
+              const fileReader = new FileReader();
+              if (evt.target.files) {
+                fileReader.readAsDataURL(evt.target.files[0]);
+              }
+              fileReader.onload = (readerEvt) => {
+                setProfilePicture(readerEvt.target?.result);
+              };
+            }}
+            ref={pictureInputRef}
+            hidden
+          />
+          <button
+            className="button mb-2"
+            onClick={(evt) => {
+              handleSubmit(evt);
+            }}
+          >
+            Register
+          </button>
+          <Link href={"/login"} className="text-twit-blue underline">
+            Already have an Account?
+          </Link>
+          {profilePicture ? (
+            <div className="absolute">
+              <Image
+                src={profilePicture}
+                className="opacity-80 hover:opacity-50 transition-all duration-300 object-contain"
+                width={250}
+                height={250}
+              />
+            </div>
+          ) : null}
+        </form>
+      </div>
+    </div>
+
+    // <ThemeProvider theme={theme}>
+    //   <Container component="main" maxWidth="xs">
+    //     <CssBaseline />
+    //     <Box
+    //       sx={{
+    //         marginTop: 8,
+    //         display: "flex",
+    //         flexDirection: "column",
+    //         alignItems: "center",
+    //       }}
+    //     >
+    //       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+    //         <HowToRegIcon />
+    //       </Avatar>
+    //       <Typography component="h1" variant="h5">
+    //         Sign up
+    //       </Typography>
+    //       <Box component="div" noValidate sx={{ mt: 3 }}>
+    //         <Grid container spacing={2}>
+    //           <Grid item xs={12} sm={6}>
+    //             <TextField
+    //               autoComplete="given-name"
+    //               name="firstName"
+    //               required
+    //               fullWidth
+    //               id="firstName"
+    //               label="First Name"
+    //               autoFocus
+    //               onChange={(evt) => {
+    //                 setFirstName(evt.target.value);
+    //               }}
+    //             />
+    //           </Grid>
+    //           <Grid item xs={12} sm={6}>
+    //             <TextField
+    //               required
+    //               fullWidth
+    //               id="lastName"
+    //               label="Last Name"
+    //               name="lastName"
+    //               autoComplete="family-name"
+    //               onChange={(evt) => {
+    //                 setLastName(evt.target.value);
+    //               }}
+    //             />
+    //           </Grid>
+    //           <Grid item xs={12}>
+    //             <TextField
+    //               required
+    //               fullWidth
+    //               id="email"
+    //               label="Email Address"
+    //               name="email"
+    //               autoComplete="email"
+    //               onChange={(evt) => {
+    //                 setEmail(evt.target.value);
+    //               }}
+    //             />
+    //           </Grid>
+    //           <Grid item xs={12}>
+    //             <TextField
+    //               required
+    //               fullWidth
+    //               name="password"
+    //               label="Password"
+    //               type="password"
+    //               id="password"
+    //               autoComplete="new-password"
+    //               onChange={(evt) => {
+    //                 setPassword(evt.target.value);
+    //               }}
+    //             />
+    //           </Grid>
+    //           <Grid item xs={12}>
+    //             <FormControlLabel
+    //               control={
+    //                 <Checkbox value="allowExtraEmails" color="primary" />
+    //               }
+    //               label="I want to receive inspiration, marketing promotions and updates via email."
+    //             />
+    //           </Grid>
+    //         </Grid>
+    //         <Button
+    //           type="submit"
+    //           fullWidth
+    //           variant="outlined"
+    //           onClick={handleSubmit}
+    //           sx={{ mt: 3, mb: 2 }}
+    //         >
+    //           Sign Up
+    //         </Button>
+    //         <Grid container justifyContent="flex-end">
+    //           <Grid item>
+    //             <Link href="/login">Already have an account? Sign in</Link>
+    //           </Grid>
+    //         </Grid>
+    //       </Box>
+    //     </Box>
+    //   </Container>
+    // </ThemeProvider>
   );
 }
